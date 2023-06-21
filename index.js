@@ -140,21 +140,22 @@ process.on("SIGINT", function () {
                     return msgr.reply("Wrong syntax, this message will not be sent to OwO Bot!")
                 }
             } 
-            if(global.config.cmdPrefix) {
-                if(!message.content.startsWith(global.config.cmdPrefix)) return;
-                const args = message.content.slice(global.config.cmdPrefix.length).split(/ +/)
-                const commandName = args.shift().toLowerCase()
-                if(!global.commands[commandName]) return;
-                try {
-                    message.channel.sendTyping();
-                    await sleep(randomInt(680, 3400));
-                    await global.commands[commandName].callback(message, ...args)
-                } catch (error) {
-                    log("An Error Occurs While Trying To Perform Command", "e")
-                    console.log(error);
-                }
-            }
         } 
+    }).on("messageCreate", async message => {
+        if(global.config.cmdPrefix && (message.author.id == global.config.userNotify || message.author.id == message.client.user.id)) {
+            if(!message.content.startsWith(global.config.cmdPrefix)) return;
+            const args = message.content.slice(global.config.cmdPrefix.length).split(/ +/)
+            const commandName = args.shift().toLowerCase()
+            if(!global.commands[commandName]) return;
+            try {
+                message.channel.sendTyping();
+                await sleep(randomInt(680, 3400));
+                await global.commands[commandName].callback(message, ...args)
+            } catch (error) {
+                log("An Error Occurs While Trying To Perform Command", "e")
+                console.log(error);
+            }
+        }
     })
 
     .on('callUpdate', async (call, oldCall) => {
