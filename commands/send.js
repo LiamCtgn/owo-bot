@@ -14,7 +14,7 @@ export default {
             message.channel.send(`owo send <@!${target.id}> ${args[1]}`)
             const filter = msg => msg.author.id === global.owoID  && msg.embeds && msg.components.length
             const collector = message.channel.createMessageCollector({filter, max: 5, time: 10_000})
-            collector.on("collect", async (m) => {if(m.embeds[0].author.name.includes(message.client.user.tag)) await m.clickButton({ row: 0, col: 0 })})
+            collector.on("collect", async (m) => {if(m.embeds[0].author.name.includes(global.displayName)) await m.clickButton({ row: 0, col: 0 })})
         } catch (error) {
             message.reply("Failed to perform command")
             console.log(error)

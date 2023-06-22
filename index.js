@@ -23,6 +23,7 @@ let Data = JSON.parse(fs.existsSync(DataPath) ? fs.readFileSync(DataPath) : "{}"
 export var global = {}
 global.commands = {}
 global.owoID = "408785106942164992";
+global.displayName = "";
 global.channel, global.config, global.language, global.totalcmd = 0, global.totaltext = 0, global.timer = 0;
 global.callingUser = false, global.captchaDetected = false, global.paused = false, global.lastTime = 0;
 
@@ -59,7 +60,7 @@ process.on("SIGINT", function () {
     global.config = conf;
     client
     .on("ready", async () => {
-        log("\x1b[94mLogged In As " + client.user.tag, "i")
+        log("\x1b[94mLogged In As " + client.user.username, "i")
         global.startTime = new Date();
         reloadPresence(client);
         if(global.config.cmdPrefix) await commandHandler()
@@ -69,7 +70,7 @@ process.on("SIGINT", function () {
     .on("shardReady", () => reloadPresence(client))
     .on("messageCreate", async (message) => {
         if(message.author.id == global.owoID) {
-            if((message.content.includes(message.client.user.username) && message.content.match(/(check|verify) that you are.{1,3}human!/igm)) || (message.content.includes('Beep Boop') && message.channel.type == 'DM')) {
+            if((message.content.includes(global.displayName) && message.content.match(/(check|verify) that you are.{1,3}human!/igm)) || (message.content.includes('Beep Boop') && message.channel.type == 'DM')) {
                 global.captchaDetected = true;
                 console.log("\n");
                 console.log("\x1b[92mTotal command sent: \x1b[0m" + global.totalcmd);
@@ -114,7 +115,7 @@ process.on("SIGINT", function () {
                 main();
             }
 
-            else if((message.content.match(/have been banned/igm) && message.channel.type == 'DM') || (message.content.includes(message.client.user.username) && message.content.match(/have been banned/igm))) {
+            else if(message.content.match(/have been banned/) && (message.channel.type == 'DM' || message.content.includes(global.displayName))) {
                 log("ACCOUNT HAS BEEN BANNED, STOPPING SELFBOT...", "e")
                 process.kill(process.pid, "SIGINT");
             }
