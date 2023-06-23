@@ -1,6 +1,6 @@
 {
   "name": "discord-owo-selfbot",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "Ain't the best OwO selfbot, but worth a try (why not?)",
   "main": "index.js",
   "type": "module",

@@ -70,7 +70,7 @@ process.on("SIGINT", function () {
     .on("shardReady", () => reloadPresence(client))
     .on("messageCreate", async (message) => {
         if(message.author.id == global.owoID) {
-            if(((message.content.includes(m.client.user.username) || message.content.includes(global.displayName)) && message.content.match(/(check|verify) that you are.{1,3}human!/igm)) || (message.content.includes('Beep Boop') && message.channel.type == 'DM')) {
+            if(((message.content.includes(message.client.user.username) || message.content.includes(global.displayName)) && message.content.match(/(check|verify) that you are.{1,3}human!/igm)) || (message.content.includes('Beep Boop') && message.channel.type == 'DM')) {
                 global.captchaDetected = true;
                 console.log("\n");
                 console.log("\x1b[92mTotal command sent: \x1b[0m" + global.totalcmd);
