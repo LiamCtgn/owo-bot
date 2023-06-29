@@ -15,6 +15,6 @@ IF %ERRORLEVEL% NEQ 0 (
 )
 
 echo Starting index.js...
-node index.js
+node .
 
 pause
