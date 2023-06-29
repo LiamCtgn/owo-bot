@@ -1,5 +1,5 @@
-import { global } from "../index.js"
-import { main } from "../lib/SelfbotWorker.js"
+import { global } from "../index.mjs"
+import { main } from "../lib/SelfbotWorker.mjs"
 export default {
     info: "Resume the tool",
     callback: (message, ...args) => {

@@ -1,5 +1,5 @@
-import { global } from "../index.js"
-import { timeHandler } from "../lib/extension.js";
+import { global } from "../index.mjs"
+import { timeHandler } from "../lib/extension.mjs";
 export default {
     info: "Tool information",
     callback: (message, ...args) => {

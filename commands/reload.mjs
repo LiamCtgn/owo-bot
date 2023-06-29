@@ -1,4 +1,4 @@
-import { aCheck } from "../lib/SelfbotWorker.js"
+import { aCheck } from "../lib/SelfbotWorker.mjs"
 export default {
     info: "Reload The Configuration",
     callback: (message, ...args) => {

@@ -8,10 +8,10 @@ import os from "os"
 
 //import files
 
-import { collectData } from "./lib/DataCollector.js"
-import { log } from "./lib/console.js"
-import { commandHandler, randomInt, reloadPresence, sleep, solveCaptcha, timeHandler } from "./lib/extension.js"
-import { main, notify } from "./lib/SelfbotWorker.js"
+import { collectData } from "./lib/DataCollector.mjs"
+import { log } from "./lib/console.mjs"
+import { commandHandler, randomInt, reloadPresence, sleep, solveCaptcha, timeHandler } from "./lib/extension.mjs"
+import { main, notify } from "./lib/SelfbotWorker.mjs"
 
 //define variables
 export const FolderPath = path.join(os.homedir(), "data")
@@ -20,12 +20,14 @@ const LangPath = path.resolve(FolderPath, "./language.json")
 let Data = JSON.parse(fs.existsSync(DataPath) ? fs.readFileSync(DataPath) : "{}")
 
 //global variables
-export var global = {}
-global.commands = {}
-global.owoID = "408785106942164992";
-global.displayName = "";
+export var global = {
+    owoID: "408785106942164992",
+    commands: {
+
+    }
+}
 global.channel, global.config, global.language, global.totalcmd = 0, global.totaltext = 0, global.timer = 0;
-global.callingUser = false, global.captchaDetected = false, global.paused = false, global.lastTime = 0;
+global.captchaDetected = false, global.paused = false, global.lastTime = 0;
 
 //check data
 
@@ -70,7 +72,7 @@ process.on("SIGINT", function () {
     .on("shardReady", () => reloadPresence(client))
     .on("messageCreate", async (message) => {
         if(message.author.id == global.owoID) {
-            if(((message.content.includes(message.client.user.username) || message.content.includes(global.displayName)) && message.content.match(/(check|verify) that you are.{1,3}human!/igm)) || (message.content.includes('Beep Boop') && message.channel.type == 'DM')) {
+            if(((message.content.includes(message.client.user.username || message.guild.members.me.displayName || message.client.user.id)) && message.content.match(/(check|verify) that you are.{1,3}human!/igm)) || (message.content.includes('Beep Boop') && message.channel.type == 'DM')) {
                 global.captchaDetected = true;
                 console.log("\n");
                 console.log("\x1b[92mTotal command sent: \x1b[0m" + global.totalcmd);
@@ -116,7 +118,7 @@ process.on("SIGINT", function () {
                 main();
             }
 
-            else if(message.content.match(/have been banned/) && (message.channel.type == 'DM' || message.content.includes(global.displayName))) {
+            else if(message.content.match(/have been banned/) && (message.channel.type == 'DM' || message.content.includes(message.guild.members.me.displayName))) {
                 log("ACCOUNT HAS BEEN BANNED, STOPPING SELFBOT...", "e")
                 process.kill(process.pid, "SIGINT");
             }
@@ -159,28 +161,5 @@ process.on("SIGINT", function () {
             }
         }
     })
-
-    .on('callUpdate', async (call, oldCall) => {
-        if (global.callingUser) {
-            if (call.ringing && !oldCall.ringing) {
-                global.timeoutId = setTimeout(async () => {
-                    await call.stop();
-                    global.callingUser = false
-                }, 30000);
-            } else if (!call.ringing && oldCall.ringing) {
-                if (global.timeoutId) {
-                    clearTimeout(timeoutId);
-                    global.timeoutId = null;
-                }
-                if (call.channel.members.size <= 1) {
-                    await call.leave();
-                } else {
-                    await call.stop();
-                }
-                global.callingUser = false;
-            }
-        }
-    });
-
     client.emit("ready")
 })()

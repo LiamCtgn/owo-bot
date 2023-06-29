@@ -1,4 +1,4 @@
-import { global } from "../index.js"
+import { global } from "../index.mjs"
 export default {
     info: "Pause the tool",
     callback: (message, ...args) => {
