@@ -117,7 +117,7 @@ process.on("SIGINT", function () {
 
             else if(message.content.match(/verified that you are.{1,3}human!/igm) && message.channel.type == 'DM') {
                 log(`CAPTCHA HAS BEEN RESOLVED${global.config.autoResume ? ", RESTARTING SELFBOT..." : ""}`, "i");
-                if(!global.autoResume) process.exit(1);
+                if(!global.config.autoResume) process.exit(1);
                 global.captchaDetected = false;
                 main();
             }
